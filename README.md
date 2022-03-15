@@ -41,8 +41,8 @@ dotnet add package Faster.Ioc.Zero
     {
        public void Bootstrap(Builder builder)
        {
-	      builder.Register<ITransient, TransientOne>();
-		  builder.Register<ISingleton, SingletonOne>(Lifetime.Singleton);
+	   builder.Register<ITransient, TransientOne>();
+	   builder.Register<ISingleton, SingletonOne>(Lifetime.Singleton);
        }
     }
 ```
@@ -64,8 +64,8 @@ dotnet add package Faster.Ioc.Zero
        public void Bootstrap(Builder builder)
        {
 	      builder.Register<ISingleton, SingletonOne>(Lifetime.Singleton);
-		  builder.Register<ISingleton, SingletonTwo>(Lifetime.Singleton);
-          builder.Register<ISingleton, SingletonThree>(Lifetime.Singleton);
+	      builder.Register<ISingleton, SingletonTwo>(Lifetime.Singleton);
+              builder.Register<ISingleton, SingletonThree>(Lifetime.Singleton);
        }
     }
 
@@ -96,10 +96,10 @@ dotnet add package Faster.Ioc.Zero
        public void Bootstrap(Builder builder)
        {
 	      // override registration with a custom implementation using a different concrete type
-	   	  builder.Register<ITransient, TransientOne>(() => new TransientOne(new SingletonTwo()) );
-	      builder.Register<ISingleton, SingletonOne>(Lifetime.Singleton);
-		  builder.Register<ISingleton, SingletonTwo>(Lifetime.Singleton);
-          builder.Register<ISingleton, SingletonThree>(Lifetime.Singleton);
+	   builder.Register<ITransient, TransientOne>(() => new TransientOne(new SingletonTwo()) );
+	   builder.Register<ISingleton, SingletonOne>(Lifetime.Singleton);
+           builder.Register<ISingleton, SingletonTwo>(Lifetime.Singleton);
+           builder.Register<ISingleton, SingletonThree>(Lifetime.Singleton);
        }
     }
 
