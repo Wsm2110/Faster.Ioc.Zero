@@ -1,0 +1,63 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<PackageId>Faster.Ioc.Zero</PackageId>
+		<Version>0.0.1</Version>
+		<LangVersion>latest</LangVersion>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<IncludeBuildOutput>false</IncludeBuildOutput>
+		<NoPackageAnalysis>true</NoPackageAnalysis>
+		<UserSecretsId>dbbc4d96-d371-441d-ae62-3e1a7413c41b</UserSecretsId>
+		<Authors>Wiljan Ruizendaal</Authors>
+		<Product>Faster.Ioc.Zero</Product>
+		<Description>Faster.Ioc.Zero is an ioc container with zero overhead. By using sourcegenerators we generate new code which will be injected at compile time.</Description>
+		<PackageReleaseNotes>Initial release</PackageReleaseNotes>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Faster.Map" Version="3.0.0" PrivateAssets="all" />
+		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.8.0" PrivateAssets="all" />
+		<PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.4-beta1.22068.2" PrivateAssets="all" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\Faster.Ioc.Zero.Core\Faster.Ioc.Zero.Core.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Update="tools\*.ps1" CopyToOutputDirectory="Always" Pack="true" PackagePath="tools" />
+	</ItemGroup>
+
+	<!-- 👇 Add a new target that runs before the task that lists all the files to include in the NuGet package.
+          This task must run after the packages resolution target -->
+	<Target Name="AddNuGetDlls" BeforeTargets="_GetPackageFiles">
+		<!-- Merge the collection of PackageReference and Assemblies using the NuGetPackageId key.
+           This produces a new list containing the DLL path and the "IncludeInPackage" metadata-->
+		<JoinItems Left="@(ResolvedCompileFileDefinitions)" LeftKey="NuGetPackageId" LeftMetadata="*" Right="@(PackageReference)" RightKey="" RightMetadata="*" ItemSpecToUse="Left">
+			<Output TaskParameter="JoinResult" ItemName="_PackagesToPack" />
+		</JoinItems>
+
+		<ItemGroup>
+			<!-- Remove NETStandard DLLs -->
+			<_PackagesToPack Remove="@(_PackagesToPack)" Condition="%(NuGetPackageId) == 'NETStandard.Library'" />
+		</ItemGroup>
+
+		<Message Importance="High" Text="Adding DLLs from the following packages: @(_PackagesToPack->'%(NuGetPackageId)')" />
+
+		<ItemGroup>
+			<!-- Update the collection of items to pack with the DLLs from the NuGet packages -->
+			<None Include="@(_PackagesToPack)" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="true" />
+
+			<!-- Add the DLL produced by the current project to the NuGet package -->
+			<None Include="$(OutputPath)\$(AssemblyName).dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="true" />
+	
+		</ItemGroup>
+	</Target>
+
+	<ItemGroup>
+		<None Include="../../README.md">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
+
+</Project>
