@@ -25,7 +25,7 @@ dotnet add package Faster.Ioc.Zero
 
     public interface ITransient{}
 	
-	public interface ISingleton{}
+    public interface ISingleton{}
 
     public class TransientOne : ITransient
     { 
