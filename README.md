@@ -72,8 +72,8 @@ dotnet add package Faster.Ioc.Zero
 	var singletons = Container.GetAllISingleton();
     
 ``` 
-### Supports params of type IEnumerable<>, ICollections and Arrays 
-### Override param while multiple concrete classes are registered. By default when multiple concrete classes are active and no override is given. the first registered concrete class is used. The 
+5. Supports params of type IEnumerable<>, ICollections and Arrays 
+6. Override param while multiple concrete classes are registered. By default when multiple concrete classes are active and no override is given. the first registered concrete class is used. The 
 
 ```C#
 
@@ -106,11 +106,13 @@ dotnet add package Faster.Ioc.Zero
 	var transientWithSingletonTwo = Container.TransientOne();
     
 ```
-### the constructor with the largest param count is always resolved unless the resolver is overridden
+7. the constructor with the largest param count is always resolved unless the resolver is overridden
 
 ## Benchmark
 
 According to the benchmark https://github.com/danielpalme/IocPerformance/blob/main/README.md grace is one of the faster ioc frameworks. 
+
+Each Benchmark resolves 1500000 objects
 
 ### Basic Features
 |**Container**|**Singleton**|**Transient**|**Combined**|**Complex**|**Generics**|**IEnumerable**|
